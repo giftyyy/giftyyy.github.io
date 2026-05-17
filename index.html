@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX TRADING — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080b0f;
+    --surface: #0d1117;
+    --border: #1a2030;
+    --bull: #00e5a0;
+    --bear: #ff3b5c;
+    --gold: #f0b429;
+    --text: #e8edf5;
+    --muted: #4a5568;
+    --accent: #2563eb;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ticker-wrap {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    height: 36px;
+    display: flex;
+    align-items: center;
+  }
+
+  .ticker-inner {
+    display: flex;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+  }
+
+  .ticker-item {
+    font-size: 11px;
+    padding: 0 28px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    border-right: 1px solid var(--border);
+  }
+
+  .ticker-item .up { color: var(--bull); }
+  .ticker-item .down { color: var(--bear); }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  nav {
+    position: fixed;
+    top: 36px; left: 0; right: 0;
+    z-index: 99;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    height: 64px;
+    background: rgba(8,11,15,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 0.15em;
+    color: var(--text);
+  }
+
+  .nav-logo span { color: var(--bull); }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--bull);
+    letter-spacing: 0.08em;
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--bull);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  section {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding: 140px 40px 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--bull);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 8vw, 110px);
+    line-height: 0.9;
+    letter-spacing: 0.04em;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  .hero-title .accent { color: var(--bull); }
+  .hero-title .italic { font-family: 'Instrument Serif', serif; font-style: italic; color: var(--gold); }
+
+  .hero-sub {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--muted);
+    max-width: 440px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+
+  .hero-stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    line-height: 1;
+    color: var(--bull);
+  }
+
+  .hero-stat-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .hero-chart {
+    position: relative;
+    height: 400px;
+    opacity: 0;
+    animation: fadeIn 1.2s ease 1s forwards;
+  }
+
+  .chart-svg { width: 100%; height: 100%; }
+  .candle-up { fill: var(--bull); }
+  .candle-down { fill: var(--bear); }
+  .wick { stroke-width: 1.5; }
+  .wick-up { stroke: var(--bull); }
+  .wick-down { stroke: var(--bear); }
+  .chart-label { fill: var(--muted); font-family: 'DM Mono', monospace; font-size: 10px; }
+
+  .chart-line {
+    fill: none;
+    stroke: var(--bull);
+    stroke-width: 2;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawLine 3s ease 1.5s forwards;
+  }
+
+  .chart-area {
+    fill: url(#areaGrad);
+    opacity: 0;
+    animation: fadeIn 1s ease 3s forwards;
+  }
+
+  @keyframes drawLine { to { stroke-dashoffset: 0; } }
+
+  .section-tag {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--bull);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-tag::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--bull);
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 5vw, 80px);
+    letter-spacing: 0.04em;
+    line-height: 0.95;
+    margin-bottom: 60px;
+  }
+
+  .winrate-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 60px;
+  }
+
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .metric-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+  }
+
+  .metric-card.bull::after { background: var(--bull); }
+  .metric-card.bear::after { background: var(--bear); }
+  .metric-card.gold::after { background: var(--gold); }
+  .metric-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+
+  .metric-icon {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .metric-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .metric-val.bull { color: var(--bull); }
+  .metric-val.bear { color: var(--bear); }
+  .metric-val.gold { color: var(--gold); }
+  .metric-sub { font-size: 11px; color: var(--muted); line-height: 1.6; }
+
+  .ring-container { display: flex; justify-content: center; margin: 48px 0; }
+  .ring-svg { overflow: visible; }
+  .ring-bg { fill: none; stroke: var(--border); stroke-width: 16; }
+  .ring-fill-bull {
+    fill: none;
+    stroke: var(--bull);
+    stroke-width: 16;
+    stroke-linecap: round;
+    stroke-dasharray: 0 440;
+    animation: ringFill 2s ease 0.5s forwards;
+  }
+
+  @keyframes ringFill { to { stroke-dasharray: 300 440; } }
+
+  .trends-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 48px;
+  }
+
+  .trend-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 40px;
+    transition: transform 0.3s;
+  }
+
+  .trend-card:hover { transform: translateY(-6px); }
+  .trend-card.bullish { border-top: 3px solid var(--bull); }
+  .trend-card.bearish { border-top: 3px solid var(--bear); }
+
+  .trend-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+  }
+
+  .trend-badge {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 2px;
+  }
+
+  .bull-badge { background: rgba(0,229,160,0.1); color: var(--bull); border: 1px solid rgba(0,229,160,0.3); }
+  .bear-badge { background: rgba(255,59,92,0.1); color: var(--bear); border: 1px solid rgba(255,59,92,0.3); }
+
+  .trend-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+
+  .trend-desc { font-size: 12px; color: var(--muted); line-height: 1.8; margin-bottom: 24px; }
+  .trend-signals { display: flex; flex-direction: column; gap: 10px; }
+  .signal { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--muted); }
+  .signal::before { content: ''; width: 16px; height: 1px; }
+  .bullish .signal::before { background: var(--bull); }
+  .bearish .signal::before { background: var(--bear); }
+  .sparkline { margin: 24px 0 0; height: 60px; }
+
+  .bar-section { margin-top: 48px; }
+  .bar-row { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+  .bar-label { font-size: 11px; letter-spacing: 0.08em; color: var(--muted); width: 80px; text-transform: uppercase; }
+  .bar-track { flex: 1; height: 8px; background: var(--border); overflow: hidden; }
+  .bar-fill {
+    height: 100%;
+    animation: barGrow 1.5s ease forwards;
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+  @keyframes barGrow { to { transform: scaleX(1); } }
+  .bar-pct { font-size: 12px; color: var(--text); width: 48px; text-align: right; }
+
+  .about-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: start; }
+
+  .avatar-frame {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .avatar-initials { font-family: 'Bebas Neue', sans-serif; font-size: 120px; color: var(--border); letter-spacing: 0.1em; }
+
+  .avatar-tag {
+    position: absolute;
+    bottom: 24px; left: 24px; right: 24px;
+    background: rgba(8,11,15,0.9);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    backdrop-filter: blur(10px);
+  }
+
+  .avatar-name { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .avatar-role { font-size: 11px; color: var(--bull); letter-spacing: 0.15em; text-transform: uppercase; }
+  .about-content { padding-top: 20px; }
+
+  .about-bio {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 40px;
+    font-style: italic;
+  }
+
+  .about-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+  .fact-item { border-left: 2px solid var(--border); padding-left: 20px; }
+  .fact-val { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+  .fact-label { font-size: 10px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; }
+  .expertise-list { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  .expertise-tag {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    transition: all 0.2s;
+    cursor: default;
+  }
+
+  .expertise-tag:hover { border-color: var(--bull); color: var(--bull); background: rgba(0,229,160,0.05); }
+
+  .trades-table { width: 100%; border-collapse: collapse; margin-top: 48px; font-size: 12px; }
+  .trades-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  .trades-table td { padding: 14px 16px; border-bottom: 1px solid rgba(26,32,48,0.5); transition: background 0.2s; }
+  .trades-table tr:hover td { background: var(--surface); }
+  .td-bull { color: var(--bull); }
+  .td-bear { color: var(--bear); }
+  .td-gold { color: var(--gold); }
+  .type-pill { font-size: 10px; padding: 3px 10px; border-radius: 2px; letter-spacing: 0.1em; }
+  .long-pill { background: rgba(0,229,160,0.1); color: var(--bull); }
+  .short-pill { background: rgba(255,59,92,0.1); color: var(--bear); }
+
+  /* ── MOOMOO TRACKER ── */
+  #moomoo {
+    min-height: auto;
+    padding-bottom: 100px;
+  }
+
+  .moo-toolbar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .moo-input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 10px 16px;
+    letter-spacing: 0.05em;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 140px;
+  }
+
+  .moo-input:focus { border-color: var(--bull); }
+  .moo-input::placeholder { color: var(--muted); }
+
+  .moo-input.wide { width: 200px; }
+
+  .moo-btn {
+    background: transparent;
+    border: 1px solid var(--bull);
+    color: var(--bull);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .moo-btn:hover { background: var(--bull); color: var(--bg); }
+
+  .moo-btn.danger {
+    border-color: var(--bear);
+    color: var(--bear);
+  }
+
+  .moo-btn.danger:hover { background: var(--bear); color: var(--bg); }
+
+  .moo-summary {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .moo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    position: relative;
+  }
+
+  .moo-card-label { font-size: 10px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+  .moo-card-val { font-family: 'Bebas Neue', sans-serif; font-size: 32px; line-height: 1; }
+
+  .moo-table-wrap { overflow-x: auto; }
+
+  .moo-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .moo-table th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .moo-table td { padding: 12px 14px; border-bottom: 1px solid rgba(26,32,48,0.4); white-space: nowrap; }
+  .moo-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .moo-delete {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.2s;
+    padding: 2px 6px;
+  }
+
+  .moo-delete:hover { color: var(--bear); }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 0;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+  }
+
+  .empty-state div:first-child { font-size: 40px; margin-bottom: 12px; opacity: 0.3; }
+
+  .import-area {
+    margin-top: 32px;
+    border: 1px dashed var(--border);
+    padding: 24px;
+    background: var(--surface);
+  }
+
+  .import-label { font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
+
+  .import-textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 12px;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    letter-spacing: 0.04em;
+  }
+
+  .import-textarea:focus { border-color: var(--bull); }
+  .import-hint { font-size: 10px; color: var(--muted); margin-top: 8px; line-height: 1.7; }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.15em; color: var(--muted); }
+  .footer-disc { font-size: 10px; color: var(--muted); max-width: 480px; line-height: 1.7; text-align: center; }
+  .footer-time { font-size: 11px; color: var(--bull); letter-spacing: 0.1em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+  .divider { width: 100%; height: 1px; background: var(--border); }
+</style>
+</head>
+<body>
+
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<nav>
+  <div class="nav-logo">APEX<span>.</span>TRADING</div>
+  <ul class="nav-links">
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#trends">Trends</a></li>
+    <li><a href="#winrate">Win Rate</a></li>
+    <li><a href="#moomoo">Moomoo</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <div class="nav-status">
+    <div class="status-dot"></div>
+    MARKETS OPEN
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="padding-top:160px;">
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-label">// Active Trader Portfolio v2.4</div>
+      <h1 class="hero-title">
+        PRECISION<br>
+        <span class="italic">driven</span><br>
+        <span class="accent">RETURNS</span>
+      </h1>
+      <p class="hero-sub">
+        Systematic trading across equities, forex, and crypto markets.
+        Data-driven entries, disciplined exits. Every position backed
+        by quantitative analysis and multi-timeframe confluence.
+      </p>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-val" id="hs-winrate">73%</div>
+          <div class="hero-stat-label">Win Rate</div>
+        </div>
+        <div>
+          <div class="hero-stat-val" id="hs-rr">2.4x</div>
+          <div class="hero-stat-label">Avg R:R</div>
+        </div>
+        <div>
+          <div class="hero-stat-val" id="hs-ytd">+284%</div>
+          <div class="hero-stat-label">YTD Return</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-chart">
+      <svg class="chart-svg" viewBox="0 0 560 400" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#00e5a0" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#00e5a0" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <line x1="0" y1="80" x2="560" y2="80" stroke="#1a2030" stroke-width="1"/>
+        <line x1="0" y1="160" x2="560" y2="160" stroke="#1a2030" stroke-width="1"/>
+        <line x1="0" y1="240" x2="560" y2="240" stroke="#1a2030" stroke-width="1"/>
+        <line x1="0" y1="320" x2="560" y2="320" stroke="#1a2030" stroke-width="1"/>
+        <text x="8" y="76" class="chart-label">$420</text>
+        <text x="8" y="156" class="chart-label">$380</text>
+        <text x="8" y="236" class="chart-label">$340</text>
+        <text x="8" y="316" class="chart-label">$300</text>
+        <line x1="62" y1="295" x2="62" y2="252" class="wick wick-up"/>
+        <rect x="55" y="265" width="14" height="30" class="candle-up"/>
+        <line x1="102" y1="248" x2="102" y2="290" class="wick wick-down"/>
+        <rect x="95" y="255" width="14" height="28" class="candle-down"/>
+        <line x1="142" y1="240" x2="142" y2="275" class="wick wick-up"/>
+        <rect x="135" y="250" width="14" height="22" class="candle-up"/>
+        <line x1="182" y1="218" x2="182" y2="262" class="wick wick-up"/>
+        <rect x="175" y="228" width="14" height="28" class="candle-up"/>
+        <line x1="222" y1="215" x2="222" y2="255" class="wick wick-down"/>
+        <rect x="215" y="222" width="14" height="25" class="candle-down"/>
+        <line x1="262" y1="192" x2="262" y2="235" class="wick wick-up"/>
+        <rect x="255" y="200" width="14" height="28" class="candle-up"/>
+        <line x1="302" y1="168" x2="302" y2="215" class="wick wick-up"/>
+        <rect x="295" y="178" width="14" height="30" class="candle-up"/>
+        <line x1="342" y1="162" x2="342" y2="205" class="wick wick-down"/>
+        <rect x="335" y="170" width="14" height="26" class="candle-down"/>
+        <line x1="382" y1="138" x2="382" y2="185" class="wick wick-up"/>
+        <rect x="375" y="148" width="14" height="30" class="candle-up"/>
+        <line x1="422" y1="108" x2="422" y2="158" class="wick wick-up"/>
+        <rect x="415" y="118" width="14" height="32" class="candle-up"/>
+        <line x1="462" y1="100" x2="462" y2="148" class="wick wick-down"/>
+        <rect x="455" y="110" width="14" height="28" class="candle-down"/>
+        <line x1="502" y1="78" x2="502" y2="125" class="wick wick-up"/>
+        <rect x="495" y="88" width="14" height="30" class="candle-up"/>
+        <polyline class="chart-line" points="40,310 80,290 120,272 160,258 200,240 240,228 280,208 320,185 360,168 400,148 440,128 480,112 520,92"/>
+        <polygon class="chart-area" points="40,310 80,290 120,272 160,258 200,240 240,228 280,208 320,185 360,168 400,148 440,128 480,112 520,92 520,400 40,400"/>
+        <rect x="490" y="80" width="62" height="20" fill="rgba(0,229,160,0.15)" rx="1"/>
+        <text x="500" y="94" fill="#00e5a0" font-family="DM Mono, monospace" font-size="11">$418.20</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="section-tag">Performance Metrics</div>
+  <h2 class="section-title">BY THE<br>NUMBERS</h2>
+  <div class="winrate-section">
+    <div class="metric-card bull">
+      <div class="metric-icon">// Total Trades</div>
+      <div class="metric-val bull">847</div>
+      <div class="metric-sub">Executed across 4 asset classes<br>since Jan 2022</div>
+    </div>
+    <div class="metric-card gold">
+      <div class="metric-icon">// Best Month</div>
+      <div class="metric-val gold">+68.4%</div>
+      <div class="metric-sub">March 2024 — BTC breakout<br>& tech earnings plays</div>
+    </div>
+    <div class="metric-card bear">
+      <div class="metric-icon">// Max Drawdown</div>
+      <div class="metric-val bear">-12.3%</div>
+      <div class="metric-sub">Controlled risk management<br>preserved capital throughout</div>
+    </div>
+  </div>
+
+  <div class="bar-section">
+    <div class="section-tag" style="margin-bottom:32px;">Win Rate by Asset Class</div>
+    <div class="bar-row">
+      <div class="bar-label">Crypto</div>
+      <div class="bar-track"><div class="bar-fill" style="width:78%;background:var(--bull);animation-delay:0.1s;"></div></div>
+      <div class="bar-pct td-bull">78%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Equities</div>
+      <div class="bar-track"><div class="bar-fill" style="width:71%;background:var(--bull);animation-delay:0.3s;"></div></div>
+      <div class="bar-pct td-bull">71%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Forex</div>
+      <div class="bar-track"><div class="bar-fill" style="width:69%;background:var(--gold);animation-delay:0.5s;"></div></div>
+      <div class="bar-pct td-gold">69%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Options</div>
+      <div class="bar-track"><div class="bar-fill" style="width:62%;background:var(--gold);animation-delay:0.7s;"></div></div>
+      <div class="bar-pct td-gold">62%</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Futures</div>
+      <div class="bar-track"><div class="bar-fill" style="width:58%;background:var(--bear);animation-delay:0.9s;"></div></div>
+      <div class="bar-pct td-bear">58%</div>
+    </div>
+  </div>
+
+  <div class="section-tag" style="margin-top:60px;margin-bottom:0;">Recent Closed Positions</div>
+  <table class="trades-table">
+    <thead>
+      <tr><th>Symbol</th><th>Type</th><th>Entry</th><th>Exit</th><th>P&L</th><th>R Multiple</th><th>Date</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="td-bull">BTC/USD</td><td><span class="type-pill long-pill">LONG</span></td><td>$61,240</td><td>$68,900</td><td class="td-bull">+12.5%</td><td class="td-bull">+3.1R</td><td style="color:var(--muted)">May 2, 2026</td></tr>
+      <tr><td class="td-bear">SPY</td><td><span class="type-pill short-pill">SHORT</span></td><td>$524.80</td><td>$509.20</td><td class="td-bull">+2.97%</td><td class="td-bull">+2.4R</td><td style="color:var(--muted)">Apr 28, 2026</td></tr>
+      <tr><td class="td-bull">ETH/USD</td><td><span class="type-pill long-pill">LONG</span></td><td>$2,840</td><td>$3,220</td><td class="td-bull">+13.4%</td><td class="td-bull">+2.8R</td><td style="color:var(--muted)">Apr 20, 2026</td></tr>
+      <tr><td style="color:var(--muted)">EUR/USD</td><td><span class="type-pill long-pill">LONG</span></td><td>1.0820</td><td>1.0780</td><td class="td-bear">-0.37%</td><td class="td-bear">-1.0R</td><td style="color:var(--muted)">Apr 15, 2026</td></tr>
+      <tr><td class="td-bull">NVDA</td><td><span class="type-pill long-pill">LONG</span></td><td>$872.40</td><td>$944.00</td><td class="td-bull">+8.2%</td><td class="td-bull">+2.7R</td><td style="color:var(--muted)">Apr 10, 2026</td></tr>
+      <tr><td class="td-bear">TSLA</td><td><span class="type-pill short-pill">SHORT</span></td><td>$178.60</td><td>$162.40</td><td class="td-bull">+9.1%</td><td class="td-bull">+3.0R</td><td style="color:var(--muted)">Apr 5, 2026</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="divider"></div>
+
+<!-- TRENDS -->
+<section id="trends">
+  <div class="section-tag">Market Analysis</div>
+  <h2 class="section-title">PERSONAL<br>TRENDS</h2>
+  <div class="trends-grid">
+    <div class="trend-card bullish">
+      <div class="trend-header">
+        <div>
+          <div class="trend-title">BULLISH THESIS</div>
+          <div style="font-size:11px;color:var(--muted);">Q2–Q3 2026 Outlook</div>
+        </div>
+        <span class="trend-badge bull-badge">▲ BULL</span>
+      </div>
+      <p class="trend-desc">Institutional accumulation signals persist across BTC spot markets. AI infrastructure spending continues to drive semiconductor outperformance. Fed pause cycle historically favorable for risk assets.</p>
+      <div class="trend-signals">
+        <div class="signal">BTC: Weekly close above $72K triggers new ATH run</div>
+        <div class="signal">NVDA: Earnings momentum + AI capex supercycle intact</div>
+        <div class="signal">SPX: 5,800 support held — next target 6,400</div>
+        <div class="signal">ETH: ETF inflows accelerating post-approval</div>
+        <div class="signal">Gold: Geopolitical hedge demand structurally elevated</div>
+      </div>
+      <svg class="sparkline" viewBox="0 0 320 60">
+        <polyline points="0,48 32,44 64,38 96,35 128,28 160,22 192,18 224,14 256,10 288,6 320,2" fill="none" stroke="#00e5a0" stroke-width="2"/>
+        <polygon points="0,48 32,44 64,38 96,35 128,28 160,22 192,18 224,14 256,10 288,6 320,2 320,60 0,60" fill="url(#areaGrad)" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="trend-card bearish">
+      <div class="trend-header">
+        <div>
+          <div class="trend-title">BEARISH THESIS</div>
+          <div style="font-size:11px;color:var(--muted);">Risk Scenarios to Watch</div>
+        </div>
+        <span class="trend-badge bear-badge">▼ BEAR</span>
+      </div>
+      <p class="trend-desc">Credit spreads widening on high-yield debt. Commercial real estate stress unresolved. Consumer spending deceleration visible in retail data. Overextended valuations in mega-cap tech create asymmetric downside.</p>
+      <div class="trend-signals">
+        <div class="signal">SPX: Break below 5,400 = bear market resumption</div>
+        <div class="signal">BTC: Failure at $72K → retest $55K demand zone</div>
+        <div class="signal">VIX: Complacency spike risk above 25 triggers stops</div>
+        <div class="signal">USD/JPY: BOJ intervention risk above 158</div>
+        <div class="signal">Oil: Demand destruction below $72/bbl = deflationary</div>
+      </div>
+      <svg class="sparkline" viewBox="0 0 320 60">
+        <defs>
+          <linearGradient id="bearGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ff3b5c" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#ff3b5c" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <polyline points="0,8 32,12 64,16 96,14 128,22 160,28 192,24 224,32 256,38 288,44 320,50" fill="none" stroke="#ff3b5c" stroke-width="2"/>
+        <polygon points="0,8 32,12 64,16 96,14 128,22 160,28 192,24 224,32 256,38 288,44 320,50 320,60 0,60" fill="url(#bearGrad)" opacity="0.4"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WIN RATE -->
+<section id="winrate">
+  <div class="section-tag">Statistical Analysis</div>
+  <h2 class="section-title">WIN RATE<br>BREAKDOWN</h2>
+  <div class="ring-container">
+    <svg class="ring-svg" width="280" height="280" viewBox="0 0 280 280">
+      <circle class="ring-bg" cx="140" cy="140" r="70" transform="rotate(-90 140 140)"/>
+      <circle class="ring-fill-bull" cx="140" cy="140" r="70" transform="rotate(-90 140 140)"/>
+      <text x="140" y="128" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="52" fill="#00e5a0">73%</text>
+      <text x="140" y="152" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" fill="#4a5568" letter-spacing="3">WIN RATE</text>
+      <text x="140" y="172" text-anchor="middle" font-family="DM Mono, monospace" font-size="10" fill="#4a5568">847 TRADES</text>
+    </svg>
+  </div>
+  <div class="winrate-section">
+    <div class="metric-card bull">
+      <div class="metric-icon">// Profitable Trades</div>
+      <div class="metric-val bull">618</div>
+      <div class="metric-sub">Winners with avg gain of +6.4% per trade</div>
+    </div>
+    <div class="metric-card bear">
+      <div class="metric-icon">// Losing Trades</div>
+      <div class="metric-val bear">229</div>
+      <div class="metric-sub">Losses controlled to avg -2.1% per trade</div>
+    </div>
+    <div class="metric-card gold">
+      <div class="metric-icon">// Profit Factor</div>
+      <div class="metric-val gold">3.04</div>
+      <div class="metric-sub">$3.04 earned for every $1.00 risked</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MOOMOO TRACKER -->
+<section id="moomoo">
+  <div class="section-tag">Moomoo Integration</div>
+  <h2 class="section-title">MOOMOO<br>TRACKER</h2>
+
+  <!-- Summary cards (auto-calculated) -->
+  <div class="moo-summary">
+    <div class="moo-card">
+      <div class="moo-card-label">// Total Trades</div>
+      <div class="moo-card-val td-bull" id="moo-total">0</div>
+    </div>
+    <div class="moo-card">
+      <div class="moo-card-label">// Win Rate</div>
+      <div class="moo-card-val td-bull" id="moo-wr">0%</div>
+    </div>
+    <div class="moo-card">
+      <div class="moo-card-label">// Total P&L</div>
+      <div class="moo-card-val" id="moo-pnl">$0.00</div>
+    </div>
+    <div class="moo-card">
+      <div class="moo-card-label">// Avg R:R</div>
+      <div class="moo-card-val td-gold" id="moo-rr">—</div>
+    </div>
+    <div class="moo-card">
+      <div class="moo-card-label">// Best Trade</div>
+      <div class="moo-card-val td-bull" id="moo-best">—</div>
+    </div>
+  </div>
+
+  <!-- Manual entry form -->
+  <div class="section-tag" style="margin-bottom:20px;">Add Trade Manually</div>
+  <div class="moo-toolbar">
+    <input class="moo-input wide" id="in-symbol" placeholder="Symbol (e.g. AAPL)" />
+    <select class="moo-input" id="in-type" style="cursor:pointer;">
+      <option value="LONG">LONG</option>
+      <option value="SHORT">SHORT</option>
+    </select>
+    <input class="moo-input" id="in-entry" placeholder="Entry $" type="number" step="0.01" />
+    <input class="moo-input" id="in-exit" placeholder="Exit $" type="number" step="0.01" />
+    <input class="moo-input" id="in-qty" placeholder="Qty / Lots" type="number" step="0.01" />
+    <input class="moo-input" id="in-date" type="date" />
+    <input class="moo-input wide" id="in-notes" placeholder="Notes (optional)" />
+    <button class="moo-btn" onclick="addTrade()">+ Add Trade</button>
+  </div>
+
+  <!-- Trades table -->
+  <div class="moo-table-wrap">
+    <table class="moo-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Date</th>
+          <th>Symbol</th>
+          <th>Type</th>
+          <th>Entry</th>
+          <th>Exit</th>
+          <th>Qty</th>
+          <th>P&L $</th>
+          <th>P&L %</th>
+          <th>Notes</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="moo-tbody"></tbody>
+    </table>
+  </div>
+
+  <div id="moo-empty" class="empty-state">
+    <div>📊</div>
+    <div>No trades logged yet — add your first Moomoo trade above</div>
+  </div>
+
+  <!-- CSV / Paste import -->
+  <div class="import-area">
+    <div class="import-label">// Paste CSV from Moomoo Export</div>
+    <textarea class="import-textarea" id="csv-input" placeholder="Paste CSV rows here — one trade per line&#10;Format: Date, Symbol, Type (LONG/SHORT), Entry, Exit, Qty, Notes&#10;Example: 2026-05-10, AAPL, LONG, 182.50, 194.20, 10, Earnings play"></textarea>
+    <div class="import-hint">
+      Expected columns (comma-separated): Date · Symbol · Type · Entry · Exit · Qty · Notes<br>
+      Header row is auto-detected and skipped. Paste as many rows as needed then click Import.
+    </div>
+    <div style="display:flex;gap:12px;margin-top:16px;">
+      <button class="moo-btn" onclick="importCSV()">Import CSV</button>
+      <button class="moo-btn danger" onclick="clearAll()">Clear All Trades</button>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-tag">The Trader</div>
+  <h2 class="section-title">ABOUT<br>& EXPERTISE</h2>
+  <div class="about-grid">
+    <div class="about-avatar">
+      <div class="avatar-frame">
+        <div class="avatar-initials">LWJ</div>
+        <div class="avatar-tag">
+          <div class="avatar-name">WJ</div>
+          <div class="avatar-role">// Full-Time Trader · Analyst</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-content">
+      <p class="about-bio">
+        "Markets are the greatest arena of human psychology.
+        I trade the intersection of quantitative edge and
+        behavioral inefficiency — where data meets discipline."
+      </p>
+      <div class="about-facts">
+        <div class="fact-item"><div class="fact-val">7+</div><div class="fact-label">Years Trading</div></div>
+        <div class="fact-item"><div class="fact-val">4</div><div class="fact-label">Asset Classes</div></div>
+        <div class="fact-item"><div class="fact-val">$2M+</div><div class="fact-label">Volume Traded</div></div>
+        <div class="fact-item"><div class="fact-val">3</div><div class="fact-label">Prop Firm Certs</div></div>
+      </div>
+      <div class="section-tag" style="margin-bottom:16px;">Areas of Expertise</div>
+      <div class="expertise-list">
+        <span class="expertise-tag">Technical Analysis</span>
+        <span class="expertise-tag">Price Action</span>
+        <span class="expertise-tag">Order Flow</span>
+        <span class="expertise-tag">Market Structure</span>
+        <span class="expertise-tag">Smart Money Concepts</span>
+        <span class="expertise-tag">Risk Management</span>
+        <span class="expertise-tag">Algo Backtesting</span>
+        <span class="expertise-tag">Options Greeks</span>
+        <span class="expertise-tag">Macro Analysis</span>
+        <span class="expertise-tag">Sentiment Analysis</span>
+        <span class="expertise-tag">Fibonacci</span>
+        <span class="expertise-tag">Volume Profile</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">APEX.TRADING</div>
+  <div class="footer-disc">Past performance does not guarantee future results. All trading involves risk. This portfolio is for informational purposes only and does not constitute financial advice.</div>
+  <div class="footer-time" id="footerTime"></div>
+</footer>
+
+<script>
+// ── TICKER ──
+const tickers = [
+  { sym:"BTC/USD", price:"$67,420", change:"+2.14%", up:true },
+  { sym:"ETH/USD", price:"$3,218",  change:"+1.87%", up:true },
+  { sym:"SPX",     price:"5,842.10",change:"+0.34%", up:true },
+  { sym:"NVDA",    price:"$924.60", change:"+3.21%", up:true },
+  { sym:"TSLA",    price:"$168.40", change:"-1.20%", up:false },
+  { sym:"EUR/USD", price:"1.0842",  change:"-0.12%", up:false },
+  { sym:"GLD",     price:"$218.40", change:"+0.58%", up:true },
+  { sym:"QQQ",     price:"$468.20", change:"+0.91%", up:true },
+  { sym:"VIX",     price:"14.82",   change:"-3.40%", up:false },
+  { sym:"DXY",     price:"104.22",  change:"+0.18%", up:true },
+  { sym:"SOL/USD", price:"$148.60", change:"+4.12%", up:true },
+  { sym:"OIL/WTI", price:"$78.40",  change:"-0.64%", up:false },
+];
+
+(function buildTicker() {
+  const inner = document.getElementById('ticker');
+  const doubled = [...tickers, ...tickers];
+  inner.innerHTML = doubled.map(t =>
+    `<div class="ticker-item">${t.sym} &nbsp; ${t.price} &nbsp; <span class="${t.up?'up':'down'}">${t.change}</span></div>`
+  ).join('');
+})();
+
+// ── CLOCK ──
+function updateTime() {
+  document.getElementById('footerTime').textContent =
+    new Date().toUTCString().slice(0,25) + ' UTC';
+}
+updateTime();
+setInterval(updateTime, 1000);
+
+// ── MOOMOO TRACKER ──
+let trades = JSON.parse(localStorage.getItem('moo_trades') || '[]');
+
+function save() {
+  localStorage.setItem('moo_trades', JSON.stringify(trades));
+}
+
+function calcPnL(trade) {
+  const entry = parseFloat(trade.entry);
+  const exit  = parseFloat(trade.exit);
+  const qty   = parseFloat(trade.qty) || 1;
+  const dir   = trade.type === 'SHORT' ? -1 : 1;
+  const pnlDollar = dir * (exit - entry) * qty;
+  const pnlPct    = dir * ((exit - entry) / entry) * 100;
+  return { pnlDollar, pnlPct };
+}
+
+function renderSummary() {
+  const total = trades.length;
+  const wins  = trades.filter(t => calcPnL(t).pnlDollar > 0).length;
+  const wr    = total ? Math.round((wins / total) * 100) : 0;
+  const totalPnL = trades.reduce((s, t) => s + calcPnL(t).pnlDollar, 0);
+  const best  = trades.length
+    ? Math.max(...trades.map(t => calcPnL(t).pnlDollar))
+    : null;
+
+  document.getElementById('moo-total').textContent = total;
+  document.getElementById('moo-wr').textContent    = wr + '%';
+  document.getElementById('moo-wr').className      = 'moo-card-val ' + (wr >= 50 ? 'td-bull' : 'td-bear');
+
+  const pnlEl = document.getElementById('moo-pnl');
+  pnlEl.textContent = (totalPnL >= 0 ? '+' : '') + '$' + totalPnL.toFixed(2);
+  pnlEl.className   = 'moo-card-val ' + (totalPnL >= 0 ? 'td-bull' : 'td-bear');
+
+  document.getElementById('moo-best').textContent = best !== null
+    ? (best >= 0 ? '+' : '') + '$' + best.toFixed(2) : '—';
+
+  // sync hero stats
+  if (total > 0) {
+    document.getElementById('hs-winrate').textContent = wr + '%';
+  }
+}
+
+function renderTable() {
+  const tbody = document.getElementById('moo-tbody');
+  const empty = document.getElementById('moo-empty');
+
+  if (!trades.length) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+
+  empty.style.display = 'none';
+  tbody.innerHTML = trades.map((t, i) => {
+    const { pnlDollar, pnlPct } = calcPnL(t);
+    const pnlClass = pnlDollar >= 0 ? 'td-bull' : 'td-bear';
+    const sign     = pnlDollar >= 0 ? '+' : '';
+    return `
+      <tr>
+        <td style="color:var(--muted)">${i + 1}</td>
+        <td style="color:var(--muted)">${t.date || '—'}</td>
+        <td style="font-weight:500">${t.symbol.toUpperCase()}</td>
+        <td><span class="type-pill ${t.type === 'LONG' ? 'long-pill' : 'short-pill'}">${t.type}</span></td>
+        <td>$${parseFloat(t.entry).toFixed(2)}</td>
+        <td>$${parseFloat(t.exit).toFixed(2)}</td>
+        <td>${t.qty}</td>
+        <td class="${pnlClass}">${sign}$${pnlDollar.toFixed(2)}</td>
+        <td class="${pnlClass}">${sign}${pnlPct.toFixed(2)}%</td>
+        <td style="color:var(--muted);font-size:11px;">${t.notes || ''}</td>
+        <td><button class="moo-delete" onclick="deleteTrade(${i})" title="Remove">✕</button></td>
+      </tr>`;
+  }).join('');
+}
+
+function render() {
+  renderSummary();
+  renderTable();
+}
+
+function addTrade() {
+  const symbol = document.getElementById('in-symbol').value.trim();
+  const type   = document.getElementById('in-type').value;
+  const entry  = document.getElementById('in-entry').value;
+  const exit   = document.getElementById('in-exit').value;
+  const qty    = document.getElementById('in-qty').value || '1';
+  const date   = document.getElementById('in-date').value;
+  const notes  = document.getElementById('in-notes').value.trim();
+
+  if (!symbol || !entry || !exit) {
+    alert('Symbol, Entry, and Exit are required.');
+    return;
+  }
+
+  trades.push({ symbol, type, entry, exit, qty, date, notes });
+  save();
+  render();
+
+  // clear form
+  ['in-symbol','in-entry','in-exit','in-qty','in-date','in-notes']
+    .forEach(id => document.getElementById(id).value = '');
+}
+
+function deleteTrade(i) {
+  if (!confirm('Remove this trade?')) return;
+  trades.splice(i, 1);
+  save();
+  render();
+}
+
+function clearAll() {
+  if (!confirm('Clear ALL Moomoo trades? This cannot be undone.')) return;
+  trades = [];
+  save();
+  render();
+}
+
+function importCSV() {
+  const raw = document.getElementById('csv-input').value.trim();
+  if (!raw) return;
+
+  const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+  let imported = 0;
+
+  lines.forEach(line => {
+    // skip header row
+    if (/symbol|date|entry/i.test(line.split(',')[0])) return;
+
+    const parts = line.split(',').map(p => p.trim());
+    if (parts.length < 5) return;
+
+    const [date, symbol, type, entry, exit, qty, ...notesParts] = parts;
+    const notes = notesParts.join(', ');
+    const direction = /short/i.test(type) ? 'SHORT' : 'LONG';
+
+    if (!symbol || isNaN(parseFloat(entry)) || isNaN(parseFloat(exit))) return;
+
+    trades.push({ symbol, type: direction, entry, exit, qty: qty || '1', date, notes });
+    imported++;
+  });
+
+  if (imported === 0) {
+    alert('No valid rows found. Check the format:\nDate, Symbol, Type, Entry, Exit, Qty, Notes');
+    return;
+  }
+
+  save();
+  render();
+  document.getElementById('csv-input').value = '';
+  alert(`✓ ${imported} trade(s) imported successfully.`);
+}
+
+// init
+render();
+</script>
+</body>
+</html>
