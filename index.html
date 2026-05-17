@@ -788,12 +788,12 @@
       <tr><th>Symbol</th><th>Type</th><th>Entry</th><th>Exit</th><th>P&L</th><th>R Multiple</th><th>Date</th></tr>
     </thead>
     <tbody>
-      <tr><td class="td-bull">BTC/USD</td><td><span class="type-pill long-pill">LONG</span></td><td>$61,240</td><td>$68,900</td><td class="td-bull">+12.5%</td><td class="td-bull">+3.1R</td><td style="color:var(--muted)">May 2, 2026</td></tr>
-      <tr><td class="td-bear">SPY</td><td><span class="type-pill short-pill">SHORT</span></td><td>$524.80</td><td>$509.20</td><td class="td-bull">+2.97%</td><td class="td-bull">+2.4R</td><td style="color:var(--muted)">Apr 28, 2026</td></tr>
-      <tr><td class="td-bull">ETH/USD</td><td><span class="type-pill long-pill">LONG</span></td><td>$2,840</td><td>$3,220</td><td class="td-bull">+13.4%</td><td class="td-bull">+2.8R</td><td style="color:var(--muted)">Apr 20, 2026</td></tr>
-      <tr><td style="color:var(--muted)">EUR/USD</td><td><span class="type-pill long-pill">LONG</span></td><td>1.0820</td><td>1.0780</td><td class="td-bear">-0.37%</td><td class="td-bear">-1.0R</td><td style="color:var(--muted)">Apr 15, 2026</td></tr>
-      <tr><td class="td-bull">NVDA</td><td><span class="type-pill long-pill">LONG</span></td><td>$872.40</td><td>$944.00</td><td class="td-bull">+8.2%</td><td class="td-bull">+2.7R</td><td style="color:var(--muted)">Apr 10, 2026</td></tr>
-      <tr><td class="td-bear">TSLA</td><td><span class="type-pill short-pill">SHORT</span></td><td>$178.60</td><td>$162.40</td><td class="td-bull">+9.1%</td><td class="td-bull">+3.0R</td><td style="color:var(--muted)">Apr 5, 2026</td></tr>
+      <tr><td class="td-bull">BTC/USD</td><td><span class="type-pill long-pill">LONG</span></td><td>$61,240</td><td>$68,900</td><td class="td-bull">+12.5%</td><td class="td-bull">+3.1R</td><td st[...]
+      <tr><td class="td-bear">SPY</td><td><span class="type-pill short-pill">SHORT</span></td><td>$524.80</td><td>$509.20</td><td class="td-bull">+2.97%</td><td class="td-bull">+2.4R</td><td styl[...]
+      <tr><td class="td-bull">ETH/USD</td><td><span class="type-pill long-pill">LONG</span></td><td>$2,840</td><td>$3,220</td><td class="td-bull">+13.4%</td><td class="td-bull">+2.8R</td><td styl[...]
+      <tr><td style="color:var(--muted)">EUR/USD</td><td><span class="type-pill long-pill">LONG</span></td><td>1.0820</td><td>1.0780</td><td class="td-bear">-0.37%</td><td class="td-bear">-1.0R</[...]
+      <tr><td class="td-bull">NVDA</td><td><span class="type-pill long-pill">LONG</span></td><td>$872.40</td><td>$944.00</td><td class="td-bull">+8.2%</td><td class="td-bull">+2.7R</td><td style=[...]
+      <tr><td class="td-bear">TSLA</td><td><span class="type-pill short-pill">SHORT</span></td><td>$178.60</td><td>$162.40</td><td class="td-bull">+9.1%</td><td class="td-bull">+3.0R</td><td styl[...]
     </tbody>
   </table>
 </section>
@@ -813,7 +813,7 @@
         </div>
         <span class="trend-badge bull-badge">▲ BULL</span>
       </div>
-      <p class="trend-desc">Institutional accumulation signals persist across BTC spot markets. AI infrastructure spending continues to drive semiconductor outperformance. Fed pause cycle historically favorable for risk assets.</p>
+      <p class="trend-desc">Institutional accumulation signals persist across BTC spot markets. AI infrastructure spending continues to drive semiconductor outperformance. Fed pause cycle histori[...]
       <div class="trend-signals">
         <div class="signal">BTC: Weekly close above $72K triggers new ATH run</div>
         <div class="signal">NVDA: Earnings momentum + AI capex supercycle intact</div>
@@ -834,7 +834,7 @@
         </div>
         <span class="trend-badge bear-badge">▼ BEAR</span>
       </div>
-      <p class="trend-desc">Credit spreads widening on high-yield debt. Commercial real estate stress unresolved. Consumer spending deceleration visible in retail data. Overextended valuations in mega-cap tech create asymmetric downside.</p>
+      <p class="trend-desc">Credit spreads widening on high-yield debt. Commercial real estate stress unresolved. Consumer spending deceleration visible in retail data. Overextended valuations in[...]
       <div class="trend-signals">
         <div class="signal">SPX: Break below 5,400 = bear market resumption</div>
         <div class="signal">BTC: Failure at $72K → retest $55K demand zone</div>
@@ -943,15 +943,27 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>Date</th>
+          <th>Name</th>
+          <th>Order Price</th>
+          <th>Order Qty</th>
+          <th>Order Amount</th>
+          <th>Status</th>
+          <th>Order Time</th>
           <th>Symbol</th>
-          <th>Type</th>
-          <th>Entry</th>
-          <th>Exit</th>
-          <th>Qty</th>
-          <th>P&L $</th>
-          <th>P&L %</th>
-          <th>Notes</th>
+          <th>Filled@Avg Price</th>
+          <th>Order Type</th>
+          <th>Markets</th>
+          <th>Currency</th>
+          <th>Fill Time</th>
+          <th>Fill Qty</th>
+          <th>Fill Price</th>
+          <th>Fill Amount</th>
+          <th>Counterparty</th>
+          <th>Remarks</th>
+          <th>Platform Fees</th>
+          <th>Settlement Fees</th>
+          <th>Consumption Tax</th>
+          <th>Total</th>
           <th></th>
         </tr>
       </thead>
@@ -967,11 +979,7 @@
   <!-- CSV / Paste import -->
   <div class="import-area">
     <div class="import-label">// Paste CSV from Moomoo Export</div>
-    <textarea class="import-textarea" id="csv-input" placeholder="Paste CSV rows here — one trade per line&#10;Format: Date, Symbol, Type (LONG/SHORT), Entry, Exit, Qty, Notes&#10;Example: 2026-05-10, AAPL, LONG, 182.50, 194.20, 10, Earnings play"></textarea>
-    <div class="import-hint">
-      Expected columns (comma-separated): Date · Symbol · Type · Entry · Exit · Qty · Notes<br>
-      Header row is auto-detected and skipped. Paste as many rows as needed then click Import.
-    </div>
+    <textarea class="import-textarea" id="csv-input" placeholder="Paste CSV rows here"></textarea>
     <div style="display:flex;gap:12px;margin-top:16px;">
       <button class="moo-btn" onclick="importCSV()">Import CSV</button>
       <button class="moo-btn danger" onclick="clearAll()">Clear All Trades</button>
@@ -998,227 +1006,3 @@
     <div class="about-content">
       <p class="about-bio">
         "Markets are the greatest arena of human psychology.
-        I trade the intersection of quantitative edge and
-        behavioral inefficiency — where data meets discipline."
-      </p>
-      <div class="about-facts">
-        <div class="fact-item"><div class="fact-val">7+</div><div class="fact-label">Years Trading</div></div>
-        <div class="fact-item"><div class="fact-val">4</div><div class="fact-label">Asset Classes</div></div>
-        <div class="fact-item"><div class="fact-val">$2M+</div><div class="fact-label">Volume Traded</div></div>
-        <div class="fact-item"><div class="fact-val">3</div><div class="fact-label">Prop Firm Certs</div></div>
-      </div>
-      <div class="section-tag" style="margin-bottom:16px;">Areas of Expertise</div>
-      <div class="expertise-list">
-        <span class="expertise-tag">Technical Analysis</span>
-        <span class="expertise-tag">Price Action</span>
-        <span class="expertise-tag">Order Flow</span>
-        <span class="expertise-tag">Market Structure</span>
-        <span class="expertise-tag">Smart Money Concepts</span>
-        <span class="expertise-tag">Risk Management</span>
-        <span class="expertise-tag">Algo Backtesting</span>
-        <span class="expertise-tag">Options Greeks</span>
-        <span class="expertise-tag">Macro Analysis</span>
-        <span class="expertise-tag">Sentiment Analysis</span>
-        <span class="expertise-tag">Fibonacci</span>
-        <span class="expertise-tag">Volume Profile</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="footer-logo">APEX.TRADING</div>
-  <div class="footer-disc">Past performance does not guarantee future results. All trading involves risk. This portfolio is for informational purposes only and does not constitute financial advice.</div>
-  <div class="footer-time" id="footerTime"></div>
-</footer>
-
-<script>
-// ── TICKER ──
-const tickers = [
-  { sym:"BTC/USD", price:"$67,420", change:"+2.14%", up:true },
-  { sym:"ETH/USD", price:"$3,218",  change:"+1.87%", up:true },
-  { sym:"SPX",     price:"5,842.10",change:"+0.34%", up:true },
-  { sym:"NVDA",    price:"$924.60", change:"+3.21%", up:true },
-  { sym:"TSLA",    price:"$168.40", change:"-1.20%", up:false },
-  { sym:"EUR/USD", price:"1.0842",  change:"-0.12%", up:false },
-  { sym:"GLD",     price:"$218.40", change:"+0.58%", up:true },
-  { sym:"QQQ",     price:"$468.20", change:"+0.91%", up:true },
-  { sym:"VIX",     price:"14.82",   change:"-3.40%", up:false },
-  { sym:"DXY",     price:"104.22",  change:"+0.18%", up:true },
-  { sym:"SOL/USD", price:"$148.60", change:"+4.12%", up:true },
-  { sym:"OIL/WTI", price:"$78.40",  change:"-0.64%", up:false },
-];
-
-(function buildTicker() {
-  const inner = document.getElementById('ticker');
-  const doubled = [...tickers, ...tickers];
-  inner.innerHTML = doubled.map(t =>
-    `<div class="ticker-item">${t.sym} &nbsp; ${t.price} &nbsp; <span class="${t.up?'up':'down'}">${t.change}</span></div>`
-  ).join('');
-})();
-
-// ── CLOCK ──
-function updateTime() {
-  document.getElementById('footerTime').textContent =
-    new Date().toUTCString().slice(0,25) + ' UTC';
-}
-updateTime();
-setInterval(updateTime, 1000);
-
-// ── MOOMOO TRACKER ──
-let trades = JSON.parse(localStorage.getItem('moo_trades') || '[]');
-
-function save() {
-  localStorage.setItem('moo_trades', JSON.stringify(trades));
-}
-
-function calcPnL(trade) {
-  const entry = parseFloat(trade.entry);
-  const exit  = parseFloat(trade.exit);
-  const qty   = parseFloat(trade.qty) || 1;
-  const dir   = trade.type === 'SHORT' ? -1 : 1;
-  const pnlDollar = dir * (exit - entry) * qty;
-  const pnlPct    = dir * ((exit - entry) / entry) * 100;
-  return { pnlDollar, pnlPct };
-}
-
-function renderSummary() {
-  const total = trades.length;
-  const wins  = trades.filter(t => calcPnL(t).pnlDollar > 0).length;
-  const wr    = total ? Math.round((wins / total) * 100) : 0;
-  const totalPnL = trades.reduce((s, t) => s + calcPnL(t).pnlDollar, 0);
-  const best  = trades.length
-    ? Math.max(...trades.map(t => calcPnL(t).pnlDollar))
-    : null;
-
-  document.getElementById('moo-total').textContent = total;
-  document.getElementById('moo-wr').textContent    = wr + '%';
-  document.getElementById('moo-wr').className      = 'moo-card-val ' + (wr >= 50 ? 'td-bull' : 'td-bear');
-
-  const pnlEl = document.getElementById('moo-pnl');
-  pnlEl.textContent = (totalPnL >= 0 ? '+' : '') + '$' + totalPnL.toFixed(2);
-  pnlEl.className   = 'moo-card-val ' + (totalPnL >= 0 ? 'td-bull' : 'td-bear');
-
-  document.getElementById('moo-best').textContent = best !== null
-    ? (best >= 0 ? '+' : '') + '$' + best.toFixed(2) : '—';
-
-  // sync hero stats
-  if (total > 0) {
-    document.getElementById('hs-winrate').textContent = wr + '%';
-  }
-}
-
-function renderTable() {
-  const tbody = document.getElementById('moo-tbody');
-  const empty = document.getElementById('moo-empty');
-
-  if (!trades.length) {
-    tbody.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
-
-  empty.style.display = 'none';
-  tbody.innerHTML = trades.map((t, i) => {
-    const { pnlDollar, pnlPct } = calcPnL(t);
-    const pnlClass = pnlDollar >= 0 ? 'td-bull' : 'td-bear';
-    const sign     = pnlDollar >= 0 ? '+' : '';
-    return `
-      <tr>
-        <td style="color:var(--muted)">${i + 1}</td>
-        <td style="color:var(--muted)">${t.date || '—'}</td>
-        <td style="font-weight:500">${t.symbol.toUpperCase()}</td>
-        <td><span class="type-pill ${t.type === 'LONG' ? 'long-pill' : 'short-pill'}">${t.type}</span></td>
-        <td>$${parseFloat(t.entry).toFixed(2)}</td>
-        <td>$${parseFloat(t.exit).toFixed(2)}</td>
-        <td>${t.qty}</td>
-        <td class="${pnlClass}">${sign}$${pnlDollar.toFixed(2)}</td>
-        <td class="${pnlClass}">${sign}${pnlPct.toFixed(2)}%</td>
-        <td style="color:var(--muted);font-size:11px;">${t.notes || ''}</td>
-        <td><button class="moo-delete" onclick="deleteTrade(${i})" title="Remove">✕</button></td>
-      </tr>`;
-  }).join('');
-}
-
-function render() {
-  renderSummary();
-  renderTable();
-}
-
-function addTrade() {
-  const symbol = document.getElementById('in-symbol').value.trim();
-  const type   = document.getElementById('in-type').value;
-  const entry  = document.getElementById('in-entry').value;
-  const exit   = document.getElementById('in-exit').value;
-  const qty    = document.getElementById('in-qty').value || '1';
-  const date   = document.getElementById('in-date').value;
-  const notes  = document.getElementById('in-notes').value.trim();
-
-  if (!symbol || !entry || !exit) {
-    alert('Symbol, Entry, and Exit are required.');
-    return;
-  }
-
-  trades.push({ symbol, type, entry, exit, qty, date, notes });
-  save();
-  render();
-
-  // clear form
-  ['in-symbol','in-entry','in-exit','in-qty','in-date','in-notes']
-    .forEach(id => document.getElementById(id).value = '');
-}
-
-function deleteTrade(i) {
-  if (!confirm('Remove this trade?')) return;
-  trades.splice(i, 1);
-  save();
-  render();
-}
-
-function clearAll() {
-  if (!confirm('Clear ALL Moomoo trades? This cannot be undone.')) return;
-  trades = [];
-  save();
-  render();
-}
-
-function importCSV() {
-  const raw = document.getElementById('csv-input').value.trim();
-  if (!raw) return;
-
-  const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
-  let imported = 0;
-
-  lines.forEach(line => {
-    // skip header row
-    if (/symbol|date|entry/i.test(line.split(',')[0])) return;
-
-    const parts = line.split(',').map(p => p.trim());
-    if (parts.length < 5) return;
-
-    const [date, symbol, type, entry, exit, qty, ...notesParts] = parts;
-    const notes = notesParts.join(', ');
-    const direction = /short/i.test(type) ? 'SHORT' : 'LONG';
-
-    if (!symbol || isNaN(parseFloat(entry)) || isNaN(parseFloat(exit))) return;
-
-    trades.push({ symbol, type: direction, entry, exit, qty: qty || '1', date, notes });
-    imported++;
-  });
-
-  if (imported === 0) {
-    alert('No valid rows found. Check the format:\nDate, Symbol, Type, Entry, Exit, Qty, Notes');
-    return;
-  }
-
-  save();
-  render();
-  document.getElementById('csv-input').value = '';
-  alert(`✓ ${imported} trade(s) imported successfully.`);
-}
-
-// init
-render();
-</script>
-</body>
-</html>
